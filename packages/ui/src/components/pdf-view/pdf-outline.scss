@@ -1,0 +1,22 @@
+.outline-list {
+  padding: 0.5em;
+
+  li {
+    padding: 0 0.5em 0.5em;
+    cursor: pointer;
+
+    &.active {
+      background: #6431e0;
+      color: #fff;
+      border-radius: 2px;
+    }
+
+    &.italic {
+      font-style: italic;
+    }
+
+    &.bold {
+      font-weight: bold;
+    }
+  }
+}

@@ -1,0 +1,350 @@
+import { ThenFunction } from '../await_value';
+import { EdvoObj } from './object';
+import { Ticker } from './ticker';
+import equal from 'fast-deep-equal';
+
+export interface Transactable extends EdvoObj {
+  addPrecommitHook: (fn: (trx: Transactable) => void | Promise<void>) => void;
+  addPostCommitHook: (fn: () => void | Promise<void>) => void;
+}
+
+export type ChangeContext = {
+  trx?: Transactable;
+};
+
+export type ChangeListener<T> = (
+  value: T,
+  origin: ItemEventOrigin,
+  ctx: ChangeContext,
+) => void;
+
+export type Unsubscriber = () => void;
+
+export type ItemEventOrigin = 'USER' | 'DATABASE' | 'UNKNOWN';
+
+/**
+ * IObservable interface to support Observable decorators
+ */
+export interface IObservable<T> {
+  subscribe(
+    fn: ChangeListener<T>,
+    notifyInitialValue?: boolean,
+    ctx?: ChangeContext,
+  ): Unsubscriber;
+  value: T;
+  get(): Promise<Exclude<T, undefined>>;
+  load(): Promise<void>;
+}
+
+class ObservableBase<T> extends EdvoObj implements IObservable<T> {
+  protected _val: T;
+  protected _previousVal: T | null = null;
+  private _didRequestLoad = false;
+  private _isLoaded = false;
+  protected loader: () => Promise<unknown>;
+  protected _loading?: Promise<unknown>;
+
+  constructor(defaultValue: T, loader?: () => Promise<unknown>) {
+    super();
+    this._val = defaultValue;
+    this.loader = loader || (() => this.awaitDefined());
+  }
+
+  static fromObservables<T>(
+    getval: () => T,
+    obsList: Observable<any>[],
+  ): Observable<T> {
+    const obs = new Observable(getval());
+    const recalc = (_: any, origin: ItemEventOrigin, ctx: ChangeContext) =>
+      obs.set(getval(), origin, ctx);
+    obsList.forEach((o) => {
+      obs.onCleanup(o.subscribe(recalc));
+    });
+    return obs;
+  }
+
+  /**
+   * Wait for the provided loader to complete, or for the value to be defined
+   */
+  async load() {
+    this.validate();
+    if (this._isLoaded) return;
+    if (!this._loading) {
+      this._didRequestLoad = true;
+      this._loading = this.loader();
+    }
+    await this._loading;
+    this._loading = undefined;
+    this._isLoaded = true;
+  }
+
+  isLoaded() {
+    this.validate();
+    return this._isLoaded;
+  }
+
+  subscribe(
+    fn: ChangeListener<T>,
+    notifyInitialValue?: boolean,
+    ctx: ChangeContext = {},
+  ): Unsubscriber {
+    this.validate();
+    if (notifyInitialValue) {
+      fn(this.value, 'UNKNOWN', ctx);
+    }
+    this._listeners.push(fn);
+
+    return () => {
+      this._listeners = this._listeners.filter((l) => l !== fn);
+    };
+  }
+
+  protected _listeners: ChangeListener<T>[] = [];
+  protected _inputUnsub?: () => void;
+
+  ticker(): Ticker {
+    this.validate();
+    return new Ticker(this);
+  }
+
+  async tickOnce(): Promise<void> {
+    this.validate();
+    return new Promise((resolve) => {
+      let unsub = this.subscribe(() => {
+        if (unsub) {
+          unsub();
+        }
+        resolve();
+      });
+    });
+  }
+
+  // If we use this approach, we should consolidate it with .value and .get not have a separate other accessor
+  // get read(): T {
+  //   const value = this.getValue();
+  //   const context = ComputedContext.GetContext();
+  //   if (context) {
+  //     const unsubscribe = this.subscribe(context.update);
+  //     context.subscriptions[this.key] = unsubscribe;
+  //   }
+  //   return value;
+  // }
+  notify(
+    /*value: T, oldValue: T,*/ origin: ItemEventOrigin = 'UNKNOWN',
+    ctx: ChangeContext,
+  ) {
+    this.validate();
+    this._listeners.forEach((l) => {
+      l(this.value, origin, ctx);
+    });
+  }
+
+  // Baby steps toward unifying Observables and Awaitables
+  // TODO - do the rest
+
+  /**
+   * Call the callback as soon as this Observable has a non-undefined value
+   */
+  get_then<O>(f: ThenFunction<T, O>): Promise<O> {
+    this.validate();
+    // In Rust you could do this with a blanket implementation for all Observable<Option<T>>
+    if (this._isLoaded) {
+      return Promise.resolve(f(this._val));
+    }
+
+    return this.load().then(() => f(this._val));
+  }
+
+  awaitDefined(): Promise<T> {
+    this.validate();
+    if (typeof this._val !== 'undefined') {
+      return Promise.resolve(this._val);
+    }
+
+    return new Promise((resolve) => {
+      // Subscribe to myself
+      const unsub = this.subscribe(() => {
+        if (typeof this._val !== 'undefined') {
+          // call the callback and resolve the promise
+          unsub();
+          resolve(this._val);
+        }
+      });
+    });
+  }
+
+  /**
+   * MapObs maps one Observable to another
+   * Every time this Observable's value changes, reevaluate the closure to determine what value should be in the downstream Observable.
+   * In the event that the closure itself returns an (intermediate) observable, a subscription will be created to feed the downstream observable.
+   * for a given Observable, mapObs may be called only once, and yield a single downstream observable which is directly usable, BUT will be
+   * stable against different intermediate observables if any. The unsubscription to the old intermediate, and subscription to the new intermediate is handle automatically.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  mapObs<Out, I extends Out = any>(
+    f: (arg: T) => Out | Observable<I>,
+    deepEq = false,
+  ): Observable<Out> {
+    this.validate();
+    const initialValue = f(this.value);
+
+    // IMPORTANT! Until such time as the Observable constructor takes defaultvalue: T|Observable<T> and calls .input internally
+    // It is *very* important that the below subscribe is called with notifyInitialValue: true, to insure .input gets called
+    // This is a little bit redundant, but it should be of trivial consequence for the time being.
+
+    // Updating the constructor is clearly preferable, but it would need to be updated with an additional generic
+    // parameter I extends Out, and I don't need that particular fresh-hell right now, thank you typescript.
+    const derived = new Observable<Out>(
+      initialValue instanceof Observable ? initialValue.value : initialValue,
+      () => this.load(),
+    );
+
+    derived.onCleanup(
+      this.subscribe((value, origin, ctx) => {
+        this.validate();
+        derived.input(f(value), origin, ctx, deepEq); // Think about what to do with oldValue and origin here
+      }, true),
+    );
+
+    return derived;
+  }
+  // mapObsAsync<Out extends undefined, I extends Out | undefined = any>(
+  //   f: (arg: T) => Promise<Out | Observable<I>>,
+  //   deepEq = false,
+  // ): Observable<Out> {
+  //   return this.mapObs((v) => {
+  //     const obs = new Observable<Out>(undefined);
+  //     f(v).then((out) => {
+  //       obs.set(out);
+  //     });
+  //     return obs;
+  //   });
+  // }
+
+  input<I extends T>(
+    v: T | Observable<I>,
+    origin: ItemEventOrigin,
+    ctx: ChangeContext,
+    deepEq = false,
+  ) {
+    this.validate();
+    if (this._inputUnsub) this._inputUnsub();
+
+    if (v instanceof Observable) {
+      // if I had a previous pipe thingy, then unsub it
+      // now sub to this new thingy and
+
+      // TODO think about the order of operations between the useObserveValue calling .get/.load
+      // versus this.
+
+      // I think it's safe to call the upstream loader multiple times.
+      // Either way we need to unset the old loader in case we were previously subscribed to a different Observable
+      this.loader = () => v.load();
+      if (this._didRequestLoad) {
+        void v.load();
+      }
+
+      const unsub = v.subscribe((value, _origin, ctx) => {
+        this.validate();
+        this.set(value, _origin, ctx, deepEq);
+      }, true);
+      this._inputUnsub = unsub;
+    } else {
+      this.set(v, origin, ctx, false);
+    }
+  }
+
+  /**
+   * Call the callback as soon as this Observable has a non-undefined value
+   */
+  once(): Promise<T> {
+    this.validate();
+    return new Promise((resolve) => {
+      // Subscribe to myself
+      const unsub = this.subscribe(() => {
+        this.validate();
+        unsub();
+        resolve(this._val);
+      });
+    });
+  }
+
+  /**
+   * Resolve the promise when this Observable has a non-undefined value
+   */
+  async get(): Promise<Exclude<T, undefined>> {
+    this.validate();
+    await this.load();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - We politely insist that any nonstandard loader not resolve until the value here is at least defined. (null or otherwise)
+    return this._val;
+  }
+
+  async toValue(): Promise<Exclude<T, undefined>> {
+    this.validate();
+    await this.load();
+    let val = this._val;
+    this.destroy();
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - We politely insist that any nonstandard loader not resolve until the value here is at least defined. (null or otherwise)
+    return val;
+  }
+
+  get value(): T {
+    this.validate();
+    return this._val;
+  }
+
+  get previousValue(): T | null {
+    this.validate();
+    return this._previousVal;
+  }
+
+  protected getValue(): T {
+    this.validate();
+    return this._val;
+  }
+}
+
+function isIObservable<T>(arg: any): arg is IObservable<T> {
+  return (
+    arg instanceof Object &&
+    arg.load &&
+    typeof arg.load === 'function' &&
+    arg.subscribe &&
+    typeof arg.subscribe === 'function'
+  );
+}
+
+export class Observable<T> extends ObservableWriter<T> implements IObservable<T> {
+  static split<T>(defaultValue: T, loader?: () => Promise<unknown>) : [ObservableReader<T>, ObservableWriter<T>] {
+    
+  }
+}
+
+export class ObservableReader<T> extends ObservableBase<T> implements IObservable<T>{
+}
+
+
+export class ObservableWriter<T> extends EdvoObj {
+  // TODO: Should ctx be optional here?
+  set(
+    value: T,
+    origin: ItemEventOrigin = 'UNKNOWN',
+    ctx?: ChangeContext,
+    deepEq = false,
+  ) {
+    this.validate();
+
+    const changed = deepEq ? !equal(value, this._val) : value !== this._val;
+    this._previousVal = this._val;
+    this._val = value;
+    if (changed) this.notify(origin, ctx || {});
+  }
+
+  setValueQuiet(value: T) {
+    this.validate();
+    this._val = value;
+  }
+}

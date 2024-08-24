@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    /* Basic Options */
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
+    /* Source Map Options */
+//    "sourceRoot": "./",
+//    "inlineSources": true,
+    /* Experimental Options */
+    "esModuleInterop": true,
+    "preserveWatchOutput": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "files": ["src/file-system.d.ts"],
+  "include": ["src/**/*.ts"]
+}

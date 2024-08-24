@@ -1,0 +1,55 @@
+import { config } from "@edvoapp/common";
+import { Observable, Runtime, runtime_detect } from "@edvoapp/util";
+import firebase from 'firebase';
+
+import { Navigator } from "./Navigator";
+
+type User = firebase.User;
+
+export class UserSession {
+    user: User;
+    token: Observable<string | null>;
+    constructor(args: { user: User, credential: Credential }) {
+        this.user = args.user;
+        this.token = new Observable(null);
+    }
+}
+
+export class AuthService {
+    currentSession: Observable<UserSession | null> = new Observable(null)
+    runtime: Runtime = runtime_detect();
+    constructor(readonly navigator?: Navigator) {
+        if (!['edvocom', 'content'].includes(this.runtime)) throw "only edvocom and content runtimes supported"
+    }
+    // I have an updated token which I got directly, and want to save
+    updateToken(token: string | null) {
+        if (this.runtime === 'edvocom' && this.navigator?.extensionID) {
+            let session = this.currentSession.getValue();
+            if (session) {
+                session.token.setValue(token)
+            }
+
+            if (token) {
+                window.localStorage.setItem('auth-token', token);
+            } else {
+                window.localStorage.removeItem('auth-token');
+            }
+
+            // save the cookie (localStorage?)
+            // send message to extension
+            this.navigator.sendExtensionMessage('UPDATE_AUTH_TOKEN', { token });
+        }
+    }
+    private bindBackground() {
+        // listen to UPDATE_AUTH_TOKEN messages.
+        // Per each message:
+        //  * set into extension storage
+        //  * send CHECK_AUTH messages to tabs
+
+        setStored('auth-token', token)
+    }
+    private bindContent() {
+        // listen to CHECK_AUTH(update/logout) messages
+        // storag
+    }
+}

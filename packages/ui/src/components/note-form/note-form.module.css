@@ -1,0 +1,107 @@
+/* ANCHOR: noteForm */
+
+.noteForm {
+  color: #583b21;
+  background: #fff7ca;
+  border-radius: 25px;
+  filter: drop-shadow(0px 3px 12px rgba(0, 0, 0, 0.07));
+  width: 100%;
+  position: relative;
+  border: 0.5px solid rgba(0, 0, 0, 0.05);
+  /* display: block; */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ANCHOR: header */
+
+.header {
+  font-weight: 700;
+  color: #8c5a2f;
+  font-size: 1.1em;
+  padding: 1em;
+}
+
+/* ANCHOR: body */
+
+.body {
+  align-self: stretch;
+  margin: 0 1em 0 2em;
+  flex-shrink: 0;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  resize: none;
+  outline: none;
+  overflow: hidden;
+  min-height: 10em;
+  line-height: 1.5;
+}
+.body:disabled {
+  opacity: 0.75;
+}
+
+/* ANCHOR: bottomRow */
+
+.bottomRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 1em;
+  position: relative;
+}
+
+/* ANCHOR: error */
+
+.error {
+  color: rgb(228, 100, 100);
+  font-style: italic;
+  margin-right: 1em;
+  position: relative;
+  z-index: 0;
+}
+
+/* ANCHOR: success */
+
+.success {
+  color: rgb(99, 168, 99);
+  font-style: italic;
+  transition: opacity 0.15s;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: -1;
+}
+.success.flagHidden {
+  opacity: 0;
+}
+
+/* ANCHOR: submit */
+
+.submit {
+  background: #dabf8e;
+  font-weight: 700;
+  font-size: 1.25em;
+  border: 0;
+  padding: 0.25em 0.5em;
+  border-radius: 10px;
+  cursor: pointer;
+  color: inherit;
+  transition: opacity 0.15s;
+  outline: none;
+  position: relative;
+  z-index: 0;
+}
+.submit:disabled {
+  cursor: default;
+  opacity: 0.75;
+}
+.submit.flagHidden {
+  opacity: 0;
+  cursor: default;
+}

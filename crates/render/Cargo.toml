@@ -1,0 +1,50 @@
+[package]
+name = "edvo-render"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.65"
+exclude = ["examples"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "render"
+crate-type = ["cdylib", "rlib"]
+
+[[example]]
+name = "positioned"
+
+[[example]]
+name = "radial-nav"
+
+[dependencies]
+
+edvo-viewmodel = { path = "../viewmodel" }
+bytemuck = { version = "1.12.3", features = ["derive"] }
+console_error_panic_hook = "0.1.7"
+env_logger = "0.10.0"
+futures = "0.3.26"
+log = "0.4.17"
+lyon = "1.0.1"
+rctree = "0.5.0"
+usvg = "0.28.0"
+wasm-bindgen = "0.2.83"
+wasm-bindgen-futures = "0.4.33"
+wgpu = { version = "0.15.0", features = ["webgl"] }
+winit = "0.29.15"
+js-listener = { path = "../js-listener" }
+normalize-css-z = "0.5"
+
+[dependencies.web-sys]
+version = "0.3.60"
+features = [
+    "Document",
+    "Element",
+    "HtmlCanvasElement",
+    "VisibilityState",
+    "Window",
+]
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+pollster = "0.3.0"
+wgpu = "0.15.1"

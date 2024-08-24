@@ -1,0 +1,13 @@
+node_modules
+.DS_Store
+.firebase/
+*-debug.log
+.idea/
+dist/
+_/
+build/
+firebase-cfg-*.json
+size-plugin.json
+build-firefox/
+target/
+.turbo

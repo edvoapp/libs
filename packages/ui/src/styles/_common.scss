@@ -1,0 +1,26 @@
+@import 'variables';
+
+.edvo__subtitle {
+  font-style: normal;
+  font-weight: 600;
+  font-variation-settings: 'wght' 600;
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 0.05em;
+}
+
+.edvo__text-white {
+  color: #fff;
+}
+
+.edvo__text-grey-dark {
+  color: $grey-dark;
+}
+
+.edvo__text-grey-light {
+  color: $grey-light;
+}
+
+.edvo__text-grey-med-light {
+  color: $grey-med-light;
+}

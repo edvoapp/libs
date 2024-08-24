@@ -1,0 +1,29 @@
+{
+  "name": "@edvoapp/wasm-bindings",
+  "version": "1.0.0",
+  "files": [
+    "./dist/index_bg.wasm",
+    "./dist/index.js",
+    "./dist/index.d.ts"
+  ],
+  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "link": "bun link",
+    "dev": "nodemon --config ./nodemon.json --exec \"wasm-pack build --dev --target bundler --out-dir ./dist --out-name=index --scope=edvoapp && pnpm run monkeypatch\"",
+    "build": "rimraf dist && wasm-pack build --target bundler --out-dir ./dist --out-name=index --scope=edvoapp && pnpm run monkeypatch",
+    "monkeypatch": "node ./scripts/monkeypatch.js",
+    "prep": "pnpm run build",
+    "buildnode": "cd ../../node_modules/wasm-pack && pnpm postinstall && cd ../../packages/wasm-bindings rimraf dist && wasm-pack build --target nodejs --out-dir ./dist --out-name=index"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@open-wc/webpack-import-meta-loader": "^0.4.7",
+    "nodemon": "^2.0.15",
+    "rimraf": "^3.0.2",
+    "wasm-pack": "^0.10.2"
+  }
+}

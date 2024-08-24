@@ -1,0 +1,61 @@
+.user-avatar ~ .user-avatar {
+  margin-left: -15px;
+  border: 1px solid #ccc;
+}
+
+.user-avatar-wrapper ~ .tooltip.user-avatar-wrapper {
+  margin-left: -15px;
+  border: 1px solid #ccc;
+}
+
+.user-avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 6px;
+  position: relative;
+  background-color: #c026d3;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  &.xs {
+    height: 16px;
+    width: 16px;
+    font-size: 6pt;
+    font-weight: 700;
+  }
+
+  &.small {
+    height: 24px;
+    width: 24px;
+    font-size: 10pt;
+    font-weight: 700;
+  }
+
+  &.small-medium {
+    height: 48px;
+    width: 48px;
+    font-size: 20pt;
+    font-weight: 700;
+  }
+
+  &.medium {
+    height: 128px;
+    width: 128px;
+
+    font-size: 40pt;
+    font-weight: 700;
+  }
+
+  & > img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    background-color: transparent;
+  }
+}

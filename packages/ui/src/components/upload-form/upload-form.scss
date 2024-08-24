@@ -1,0 +1,17 @@
+form {
+  width: 100%;
+  text-align: center;
+  cursor: initial;
+
+  input {
+    background: white;
+    border-radius: 2px;
+    padding: 5px 10px;
+    border: 1px solid lightgrey;
+    cursor: pointer;
+
+    &[disabled] {
+      opacity: 0.5;
+    }
+  }
+}

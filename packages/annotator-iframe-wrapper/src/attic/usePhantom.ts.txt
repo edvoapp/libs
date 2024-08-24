@@ -1,0 +1,25 @@
+import { useEffect } from 'preact/hooks';
+import { publishMessageToOuter } from './pubsub.ts.attic';
+
+import useMeasure, { UseMeasureResult } from '../../../annotator/src/hooks/useMeasure';
+
+export const usePhantom = <E extends HTMLElement = HTMLElement>(id: string): UseMeasureResult<E> => {
+  const [ref, dims] = useMeasure<E>();
+  useEffect(() => {
+    const {
+      rect: { width, height, top, left },
+      cursor,
+      pointerEvents,
+    } = dims;
+    publishMessageToOuter('CREATE_PHANTOM', {
+      style: { width, height, top, left, cursor, pointerEvents },
+      id,
+      events: ['click'],
+    });
+    return () => {
+      publishMessageToOuter('REMOVE_PHANTOM', { id });
+    };
+  }, [dims, id]);
+
+  return [ref, dims];
+};

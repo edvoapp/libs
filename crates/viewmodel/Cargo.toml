@@ -1,0 +1,48 @@
+[package]
+name = "edvo-viewmodel"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+edvo-model = { path = "../model" }
+yrs.workspace = true
+
+wasm-bindgen = "0.2.63"
+wasm-bindgen-futures = "0.4"
+log = "0.4.6"
+#observable-rs = { path = "../../../observable-rs/crates/observable" }
+#observable-react = { path = "../../../observable-rs/crates/react" }
+observable-rs = { git = "https://github.com/kranfix/observable-rs.git", rev = "cb60ee2f6d97a8f65f058ca2eeb404295b6f1f28" }
+observable-react = { git = "https://github.com/kranfix/observable-rs.git", rev = "cb60ee2f6d97a8f65f058ca2eeb404295b6f1f28" }
+js-sys = "0.3.59"
+futures-timer = "3.0.2"
+serde = { version = "1.0.105", features = ["derive"] }
+serde_json = "1.0"
+futures = "0.3.23"
+similar = "2.2.0"
+rand = "0.8.5"
+getrandom = { version = "0.2", features = ["js"] }
+
+[dependencies.web-sys]
+version = "0.3.60"
+features = [
+  'Document',
+  'Element',
+  'HtmlElement',
+  'Node',
+  'Window',
+  'DomTokenList',
+  'Text',
+  'Range',
+  'DomRect',
+]
+
+[dev-dependencies]
+plotters = "0.3.1"
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "fdg_benchmark"
+harness = false

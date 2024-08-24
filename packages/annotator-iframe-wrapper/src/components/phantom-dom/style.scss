@@ -1,0 +1,6 @@
+@import '../../style/variables';
+
+.phantomDiv {
+  position: absolute;
+  z-index: $z-index - 1;
+}

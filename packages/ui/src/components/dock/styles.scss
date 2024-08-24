@@ -1,0 +1,260 @@
+.dock {
+  position: fixed;
+  //background: #f0808044;
+  z-index: 100001;
+
+  &.populated {
+    background: rgba(0, 0, 0, 0.07);
+  }
+
+  .dock-bg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    //cursor: pointer;
+    pointer-events: none;
+    background: none;
+    border-radius: 5px;
+    padding: 8px;
+    z-index: 2;
+  }
+
+  &.dock-side-west {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 32px;
+    .dock-bg {
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 32px;
+    }
+  }
+  &.dock-side-east {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 32px;
+    .dock-bg {
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 32px;
+    }
+  }
+  &.dock-side-south {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 32px;
+
+    .dock-bg {
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 32px;
+    }
+  }
+
+  &.drop-eligible {
+    .drop-text.drag {
+      display: block;
+      color: #444;
+    }
+    .dock-bg {
+      background: #a1a1bd;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      border-radius: 5px;
+    }
+  }
+  &.can-drop {
+    .drop-text.drag {
+      display: none;
+    }
+    .drop-text.drop {
+      display: block;
+      color: #333;
+    }
+    .dock-bg {
+      background: #7373bd;
+    }
+  }
+  .drop-text {
+    display: none;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 19px;
+    white-space: nowrap;
+  }
+
+  .dock-members {
+    padding: 15px 20px;
+    max-height: 400px;
+    display: flex;
+    align-items: center;
+  }
+
+  .topic-subspace {
+    height: 100%;
+    width: 100%;
+  }
+
+  .dock-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 5px;
+    position: fixed;
+    display: flex;
+
+    &.appearance-stickynote {
+      .topic-name-container {
+        display: none;
+      }
+    }
+
+    &.appearance-browser {
+      display: flex;
+      flex-direction: column;
+    }
+
+    iframe,
+    webview {
+      height: 100%;
+      width: 100%;
+    }
+    .dock-card-tab {
+      padding: 0 10px;
+      flex: 1;
+      // weird hack needed to prevent child from overflowing...
+      width: 0;
+
+      &.pressed {
+        box-shadow: inset 2px 3px 3px 1px rgba(0, 0, 0, 0.3);
+      }
+    }
+    .avatar-body {
+      background: #aed6fb;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 12px;
+      height: 12px;
+      margin-right: 5px;
+      flex: 0 0 12px;
+    }
+    .dock-card-tab-text {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 12px;
+      color: #000000;
+      flex: 1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      // weird hack needed to prevent child from overflowing...
+      width: 0;
+    }
+  }
+
+  .react-resizable-handle {
+    opacity: 0.3;
+    background: none;
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    z-index: 999999998;
+  }
+
+  .react-resizable-handle-n {
+    transform: translateY(-50%);
+  }
+  .react-resizable-handle-s {
+    transform: translateY(50%);
+  }
+  .react-resizable-handle-w {
+    transform: translateX(-50%);
+  }
+  .react-resizable-handle-e {
+    transform: translateX(50%);
+  }
+  .react-resizable-handle-nw {
+    transform: translate(-50%, -50%);
+  }
+  .react-resizable-handle-ne {
+    transform: translate(50%, -50%);
+  }
+  .react-resizable-handle-sw {
+    transform: translate(-50%, 50%);
+  }
+  .react-resizable-handle-se {
+    transform: translate(50%, 50%);
+  }
+  .react-resizable-handle-w,
+  .react-resizable-handle-sw,
+  .react-resizable-handle-nw {
+    left: 0;
+  }
+
+  .react-resizable-handle-e,
+  .react-resizable-handle-se,
+  .react-resizable-handle-ne {
+    right: 0;
+  }
+
+  .react-resizable-handle-n,
+  .react-resizable-handle-ne,
+  .react-resizable-handle-nw {
+    top: 0;
+  }
+
+  .react-resizable-handle-s,
+  .react-resizable-handle-se,
+  .react-resizable-handle-sw {
+    bottom: 0;
+  }
+
+  .react-resizable-handle-e,
+  .react-resizable-handle-w {
+    top: 0;
+    height: 100%;
+    cursor: ew-resize;
+  }
+  .react-resizable-handle-n,
+  .react-resizable-handle-s {
+    left: 0;
+    width: 100%;
+    cursor: ns-resize;
+  }
+
+  .react-resizable-handle-ne,
+  .react-resizable-handle-sw {
+    cursor: nesw-resize;
+  }
+
+  .react-resizable-handle-se,
+  .react-resizable-handle-nw {
+    cursor: nwse-resize;
+  }
+
+  .react-resizable-handle {
+    &-ne,
+    &-nw,
+    &-se,
+    &-sw {
+      z-index: 999999999;
+    }
+  }
+
+  .dock-card-expanded {
+    .topic-card-body {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}

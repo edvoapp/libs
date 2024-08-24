@@ -1,0 +1,70 @@
+export {};
+// import { Vertex, RolesMap } from "../entities/Vertex";
+// import { LinkedListIterator } from "./linked-list-iterator";
+
+// export type MainShadowOrBoth = {
+//     main: Vertex | null;
+//     shadow: Vertex | null;
+// }
+// export class ShadowIterator {
+//     protected vertexsByShadowedVertexId: { [VertexId: string]: Vertex[] } = {};
+//     protected nonShadowingMainVertexs: Vertex[] = []
+
+//     constructor(protected roles: RolesMap, mainIter: LinkedListIterator, protected shadowIter: LinkedListIterator | null) {
+//         // TODO - ensure the parts are preloaded
+//         const { shadowRole } = roles
+
+//         if (shadowIter) {
+//             mainIter.map((mainVertex) => {
+//                 if (!mainVertex.getParts().isLoaded) {
+//                     console.warn("main vertex parts not loaded - ShadowIterator")
+//                 }
+//                 let shadow = mainVertex.findPartByRoles([shadowRole])
+//                 const sid = shadow?.target?.id;
+
+//                 if (sid) {
+//                     const ref = (this.vertexsByShadowedVertexId[sid] || (this.vertexsByShadowedVertexId[sid] = []));
+//                     ref.push(mainVertex);
+//                 } else {
+//                     this.nonShadowingMainVertexs.push(mainVertex)
+//                 }
+//             })
+//         } else {
+//             this.nonShadowingMainVertexs.push(...mainIter.collect())
+//         }
+//     }
+//     next(): MainShadowOrBoth | null {
+//         if (this.shadowIter) {
+//             let shadow = this.shadowIter.next();
+//             if (shadow) {
+//                 const mains = this.vertexsByShadowedVertexId[shadow.id!] || [];
+//                 const main = mains.shift();
+
+//                 if (main) {
+//                     return { main, shadow }
+//                 } else {
+//                     return { main: null, shadow }
+//                 }
+//             }
+//         }
+//         const main = this.nonShadowingMainVertexs.shift();
+//         if (main) {
+//             return { main, shadow: null }
+//         }
+
+//         return null
+
+//     }
+//     map<Ret>(f: (obj: MainShadowOrBoth, index: number) => Ret) {
+//         let hopNumber = 0;
+//         const res: Ret[] = [];
+//         while (true) {
+//             const next = this.next();
+//             if (!next) break;
+//             hopNumber += 1;
+//             res.push(f.call(undefined, next, hopNumber));
+//         }
+
+//         return res;
+//     }
+// }

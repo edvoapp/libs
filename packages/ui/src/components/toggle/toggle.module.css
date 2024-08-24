@@ -1,0 +1,49 @@
+/* ANCHOR: toggle */
+
+.toggle {
+  display: block;
+  position: relative;
+}
+
+/* ANCHOR: checkbox */
+
+.checkbox {
+  opacity: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+
+/* ANCHOR: tictac */
+
+.tictac {
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.1), 0 0.25em 1em rgba(0, 0, 0, 0.1);
+  background: gray;
+  width: 4em;
+  border-radius: 2em;
+  border: 1px solid gray;
+  transition: background 0.15s;
+  display: flex;
+}
+.checkbox:checked + .tictac {
+  background: green;
+  border-color: green;
+}
+
+/* ANCHOR: puck */
+
+.puck {
+  background: white;
+  width: 2em;
+  height: 2em;
+  border-radius: 1em;
+  transition: margin-left 0.15s;
+}
+.checkbox:checked + .tictac .puck {
+  margin-left: 2em;
+}

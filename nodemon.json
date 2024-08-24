@@ -1,0 +1,13 @@
+{
+  "watch": ["src", "node_modules/@edvoapp"],
+  "ignoreRoot": [
+    "**/.git/**",
+    "**/.log/**",
+    "**/.nyc_output/**",
+    "**/.sass-cache/**",
+    "**/bower_components/**",
+    "**/coverage/**"
+  ],
+  "ignore": ["**/dist/**", "**/build/**"],
+  "verbose": true
+}

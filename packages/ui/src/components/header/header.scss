@@ -1,0 +1,49 @@
+/* header */
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+  background-color: white;
+  padding-left: 16px;
+  padding-right: 16px;
+  z-index: 100001;
+  .pl-logo {
+    height: 24px;
+    width: 100px;
+  }
+  .hamburger-menu {
+    cursor: pointer;
+    user-select: none;
+  }
+  // & > * {
+  //   margin-right: 24px;
+  // }
+  width: 100%;
+
+  .session-status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 12px;
+
+    &.clean,
+    &.init {
+      background-color: green;
+    }
+    &.dirty {
+      background-color: orange;
+    }
+    &.error {
+      background-color: red;
+    }
+  }
+}
+
+/* quickNoteButton */
+
+.quickNoteButton {
+  margin-right: 1em;
+}

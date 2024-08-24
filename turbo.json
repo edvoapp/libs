@@ -1,0 +1,31 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "prep": {
+      "dependsOn": ["^prep"],
+      "outputs": [
+        "dist/**",
+        "build/**",
+        "dist/**"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "cache": false,
+      "persistent": false
+    },
+    "emulator-check": {
+      "cache": false
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**","build/**","pkg/**", "*.zip"]
+    },
+    "webapp#dev": {
+      "dependsOn": ["@edvoapp/firebase#emulator-check", "^dev"]
+    }
+  }
+}

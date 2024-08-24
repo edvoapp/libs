@@ -1,0 +1,30 @@
+import { ObservableBase } from '@edvoapp/util';
+
+export class EntitySet<T = unknown> extends ObservableBase {
+  constructor(
+    private _val: T[],
+    private type: {
+      new (...args: unknown[]): T;
+    },
+  ) {
+    super();
+  }
+
+  get(): T[] {
+    return this._val;
+  }
+
+  insert(val: T) {
+    this._val.push(val);
+  }
+
+  remove(val: T) {
+    this._val = this._val.filter((v) => v !== val);
+  }
+
+  map(f: Function) {
+    return this._val.map((e) => {
+      f.call(undefined, e);
+    });
+  }
+}

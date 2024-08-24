@@ -1,0 +1,56 @@
+@import 'variables';
+
+* {
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+#edvo__root {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  z-index: $z-index;
+}
+
+#edvo-root.open {
+  opacity: 1;
+}
+
+/* iframe */
+iframe,
+webview {
+  &.edvo-annotator-app-inner#edvo-annotator-app-inner {
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+    pointer-events: none;
+    z-index: $z-index;
+    position: fixed;
+    left: 0;
+    top: 0;
+    &.active {
+      pointer-events: all;
+    }
+  }
+}
+
+.edvo__highlighted {
+  background-color: rgba(255, 229, 90, 0.3);
+  cursor: pointer;
+
+  &.inactive {
+    background-color: initial;
+    cursor: default;
+  }
+}
+
+#edvo__reader-mode {
+}
+// body > .container > .content {
+// }

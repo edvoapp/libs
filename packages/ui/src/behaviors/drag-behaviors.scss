@@ -1,0 +1,52 @@
+//[data-boundentity]:not(.drop-eligible) {
+//  pointer-events: none;
+//}
+//.drop-eligible {
+//  pointer-events: auto;
+//background-color: rgba(0, 128, 0, .1);
+//.drop-eligible {
+//  background-color: unset;
+//}
+//}
+.can-drop {
+  //background-color: rgba(0, 0, 128, .1);
+}
+
+// necessary to make iframes ignore our events
+body {
+  &.global-drag,
+  &.global-resize {
+    iframe,
+    webview {
+      pointer-events: none;
+    }
+  }
+}
+
+.drag-container {
+  position: fixed;
+  pointer-events: none;
+  transform-origin: top left;
+  z-index: 99999999;
+
+  .topic-footer,
+  .resize-container {
+    display: none;
+  }
+  .cloned-target {
+    position: absolute;
+    transform-origin: top left;
+  }
+
+  .isDragging {
+    display: flex;
+  }
+}
+
+.isDragging {
+  //&:not(.isTranclusion) {
+  //  display: none !important;
+  //}
+  //opacity: 0.5;
+  //pointer-events: none;
+}

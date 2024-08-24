@@ -1,0 +1,8 @@
+- Template injection is wonky
+- Disallow deletion of the last bullet
+- Undo history
+- Stop waiting for transaction commit before continuing with bullet addition
+- Single item Drag & Drop
+- Copy/Paste
+- Multi Item Drag Drop
+- Referencing

@@ -1,0 +1,23 @@
+.user-settings-avatar {
+}
+
+.user-settings-dropdown {
+  min-width: 200px;
+
+  .menu-item {
+    text-align: left;
+    padding: 6px 22px;
+    font-size: 14px;
+    position: relative;
+    a {
+      cursor: pointer;
+    }
+    &:hover {
+      background: rgba(93, 52, 215, 0.1);
+    }
+  }
+}
+
+.user-card {
+  padding: 12px 22px;
+}

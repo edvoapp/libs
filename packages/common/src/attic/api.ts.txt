@@ -1,0 +1,56 @@
+import firebase from 'firebase/app';
+
+import { QuerySnapshot } from '../internal';
+
+interface CssSelector {
+  cssSelector: string;
+  parentSteps: number;
+}
+
+interface LeftRightRegionSelector {
+  page: CssSelector & {
+    contentAreas: CssSelector[]
+  }
+}
+
+interface NegativeRegionSelector { }
+
+type LeftRightPaintableRegionDataDB = {
+  type: 'left-right';
+  selectors: LeftRightRegionSelector[];
+};
+
+type NegativePaintableRegionDataDB = {
+  type: 'negative';
+  selectors: NegativeRegionSelector[];
+};
+
+type PaintableRegionDataDB = {
+  name: string;
+} & (LeftRightPaintableRegionDataDB | NegativePaintableRegionDataDB);
+
+interface PageMatchingCriteria {
+  name: string;
+  type: string;
+  value: string;
+}
+
+interface MatchingCriteria {
+  AND?: PageMatchingCriteria[];
+  OR?: PageMatchingCriteria[];
+}
+
+interface SiteStyleModelDB {
+  id: string;
+  paintableRegions: PaintableRegionDataDB[];
+  name: string;
+  matchingCriteria: MatchingCriteria;
+}
+
+class Region {
+  constructor() { }
+}
+
+export async function getSiteStyleModels(): Promise<SiteStyleModelDB[]> {
+  return [];
+}

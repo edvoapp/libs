@@ -1,0 +1,43 @@
+.palette {
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(17, 24, 39, 0.1);
+  border-radius: 3px;
+}
+
+.toolbar-button:hover {
+  background: rgba(93, 52, 215, 0.1);
+}
+.toolbar-button-active {
+  background: rgba(93, 52, 215, 0.2);
+}
+
+.toolbar-panel {
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(17, 24, 39, 0.1);
+
+  border-radius: 3px;
+
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   left: -16px; /* Adjust for arrow positioning */
+  //   top: 50%;
+  //   border: 8px solid transparent;
+  //   border-right-color: rgba(255, 255, 255, 0.6); /* Arrow color */
+  //   transform: translateY(-50%);
+  //   z-index: 1;
+  // }
+}
+
+.toolbar-panel-list {
+  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.1);
+  border-radius: 3px;
+}
+
+.toolbar-panel-list-item {
+  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.1);
+  border-radius: 3px;
+  background-color: white;
+}
+
+.ReactModal__Overlay {
+  z-index: 100000 !important;
+}

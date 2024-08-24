@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "declaration": true /* Generates corresponding '.d.ts' file. */,
+    "declarationMap": true,
+    "outDir": "./dist" /* Redirect output structure to the directory. */,
+    // "rootDir": "./",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    /* Source Map Options */
+//    "sourceRoot": "./" /* Specify the location where debugger should locate TypeScript files instead of source locations. */,
+//    "inlineSources": true /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */,
+    /* Experimental Options */
+    "esModuleInterop": true,
+    "preserveWatchOutput": true,
+    "experimentalDecorators": true
+  },
+  "include": ["src/**/*.ts"]
+}

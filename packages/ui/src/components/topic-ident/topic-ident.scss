@@ -1,0 +1,15 @@
+.topic-avatar {
+  position: relative;
+  .topic-avatar-meta {
+    position: absolute;
+    bottom: 2px;
+    z-index: 999;
+
+    &.topic-avatar-comments-icon {
+      left: 2px;
+    }
+    &.topic-avatar-highlights-icon {
+      right: 2px;
+    }
+  }
+}

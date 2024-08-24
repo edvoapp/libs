@@ -1,0 +1,29 @@
+/* ANCHOR: mobileLayout */
+
+.mobileLayout {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ANCHOR: noteForm */
+
+.noteForm {
+  width: 40em;
+  max-width: 90%;
+}
+
+/* ANCHOR: spacer */
+
+.spacer {
+  height: 2em;
+  flex-shrink: 0;
+}
+.spacer.flagTop {
+  margin-bottom: auto;
+}
+.spacer.flagBottom {
+  margin-top: auto;
+}

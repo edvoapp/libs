@@ -1,0 +1,1 @@
+export { Bookmarklet } from './bookmarklet';

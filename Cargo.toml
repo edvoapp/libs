@@ -1,0 +1,7 @@
+[workspace]
+members = ["packages/wasm-bindings", "crates/*"]
+resolver = "2"
+
+[workspace.dependencies]
+unicode-segmentation = "1.11.0"
+yrs = "0.17.2"

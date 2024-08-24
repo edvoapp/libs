@@ -1,0 +1,6 @@
+{
+  "watch": ["src", "Cargo.toml", "../../crates", "../../../observable-rs"],
+  "ext": "rs,toml,wgsl",
+  "ignore": ["dist"],
+  "verbose": true
+}

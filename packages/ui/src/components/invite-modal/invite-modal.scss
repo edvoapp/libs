@@ -1,0 +1,32 @@
+.ReactModal__Overlay {
+  position: fixed;
+  inset: 0px;
+  background-color: #00000088;
+  z-index: 9999999999;
+}
+
+.invite-modal {
+  position: absolute;
+  // inset: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  left: 300px;
+  right: 300px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  padding: 20px;
+  z-index: 99999;
+
+  button.invite-button {
+    &:disabled {
+      background: #666;
+      cursor: not-allowed;
+    }
+  }
+}

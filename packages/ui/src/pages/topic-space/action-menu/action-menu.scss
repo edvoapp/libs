@@ -1,0 +1,28 @@
+.menu {
+  border-radius: 3px;
+}
+
+.menu-box-shadow {
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(17, 24, 39, 0.1);
+}
+
+.menu-button:hover {
+  background: rgba(93, 52, 215, 0.1);
+}
+.menu-button-active {
+  background: rgba(93, 52, 215, 0.2);
+}
+
+.menu-section {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+}
+.menu-section:not(:last-child)::after {
+  content: '';
+  display: flex;
+  height: 22px;
+  width: 1px;
+  background-color: #e4e4e7;
+  margin-left: 4px;
+}

@@ -1,0 +1,21 @@
+/* Customizes the scrollbar track (background) */
+.scrollable-section::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Customizes the scrollbar handle */
+.scrollable-section::-webkit-scrollbar-thumb {
+  background: #a1a1aa;
+  border-radius: 500px;
+}
+
+/* Handle on hover */
+.scrollable-section::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Customizes the scrollbar width */
+.scrollable-section::-webkit-scrollbar {
+  width: 4px;
+  height: 64px;
+}

@@ -1,0 +1,40 @@
+.minimap {
+  position: absolute;
+  bottom: 54px;
+  // right: 0px;
+  margin: 12px;
+  border-radius: 10px;
+  background-color: #fff;
+  border: 1px #666 solid;
+  pointer-events: none;
+  transition: opacity 2000ms;
+  opacity: 0;
+  z-index: 2000000000;
+
+  &.panning {
+    opacity: 0.7;
+    transition: none;
+  }
+
+  &.zooming {
+    opacity: 0.7;
+    transition: none;
+  }
+
+  .member {
+    position: absolute;
+    border-radius: 3px;
+    opacity: 0.4;
+    background-color: #666;
+    &.isTopic {
+      background-color: #000;
+    }
+  }
+
+  .viewport {
+    position: absolute;
+    background-color: #8af;
+    border-radius: 3px;
+    opacity: 0.4;
+  }
+}

@@ -1,0 +1,101 @@
+import { getSiteStyleModels } from '@edvoapp/common';
+import { Navigator } from '@edvoapp/ui';
+import { useEffect } from 'preact/hooks';
+import PubSub from 'pubsub-js';
+import { ElementBinding } from '@edvoapp/ui';
+
+// this is just to locally keep track of what messages we're subscribing to
+const subscribedMessages = new Set();
+
+export function subscribe<DataType>(message: string, cb: (data: DataType) => void) {
+  subscribedMessages.add(message);
+  return PubSub.subscribe(message, (_: string, data: DataType) => cb(data));
+}
+
+export function unsubscribe(tokenOrFunction: unknown) {
+  return PubSub.unsubscribe(tokenOrFunction);
+}
+
+export function publish(message: string, data?: unknown) {
+  if (!subscribedMessages.has(message)) return;
+  if (!PubSub.publish(message, data)) {
+    // throw an error maybe
+    console.error(`Inner Message: ${message} failed to publish`);
+  }
+}
+
+export function handleOuterMessage(e: MessageEvent) {
+  const { type, payload } = e.data;
+  publish(type, payload);
+}
+
+export function publishMessageToOuter(type: string, payload?: unknown) {
+  parent.postMessage({ type, payload }, '*');
+}
+
+export function handleInnerClick(e: MouseEvent) {
+  const target = e.target;
+  const root = document.getElementById('edvo__app-annotator-inner');
+  if (root === target) {
+    console.log('blur!!')
+    publishMessageToOuter('INNER_BLUR', null);
+  }
+}
+
+export function handleBeforeUnload() {
+  publishMessageToOuter('INNER_UNLOAD', null);
+}
+
+export function useSubscribeOnMount<DataType = unknown>(
+  message: string,
+  cb: (data: DataType) => void,
+  deps: ReadonlyArray<unknown> = [],
+) {
+  useEffect(() => {
+    const token = subscribe<DataType>(message, cb);
+    return () => unsubscribe(token);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [message, cb, ...deps]);
+}
+
+export function usePubSub() {
+  useSubscribeOnMount<{ event: MouseEvent }>('PHANTOM_CLICK', ({ event }) => {
+    const { clientX, clientY } = event;
+    const newEvent = new MouseEvent('click', { bubbles: true, clientX, clientY });
+    // const newEvent = new MouseEvent('mousedown', { bubbles: true, clientX, clientY });
+    const elem = document.elementFromPoint(clientX, clientY) as HTMLDivElement;
+
+    const focusableElement = elem.closest('.focusable');
+    let bound = (focusableElement as any)?.boundTo as ElementBinding;
+    if (bound) {
+      console.log('Bound Focusable', focusableElement);
+      bound.evtNav.focusElement(focusableElement as HTMLElement);
+    } else {
+      // LEFT OFF HERE - search for focusable. call element.boundTo.evtNav.focusElement(element)
+      elem?.focus();
+      elem?.dispatchEvent(newEvent);
+      // document.body.dispatchEvent(newEvent);
+    }
+  });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('click', handleInnerClick);
+      window.addEventListener('message', handleOuterMessage);
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      return () => {
+        window.removeEventListener('click', handleInnerClick);
+        window.removeEventListener('message', handleOuterMessage);
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    // on component mount, let the outer know
+    publishMessageToOuter('NOTIFY/INNER_READY', null);
+    publishMessageToOuter('POLL_LOCATION', null);
+    // TODO: we don't really need this anymore...
+    publishMessageToOuter('SITE_STYLE_MODEL', { styleModels: [] });
+  }, []);
+}

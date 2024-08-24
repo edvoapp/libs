@@ -1,0 +1,19 @@
+.topic-space__container {
+  .topic-space-sidebar {
+    z-index: 10000;
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 8px;
+    padding: 0px;
+    background: white;
+    padding-top: 4px;
+    -webkit-filter: drop-shadow(3px 3px 2px rgba(255, 255, 255, 0.3));
+    filter: drop-shadow(3px 3px 2px rgba(255, 255, 255, 0.3));
+
+    svg {
+      // filter: drop-shadow(1.5px 1.5px 1.5px rgb(0 0 0 / 0.4));
+    }
+  }
+}

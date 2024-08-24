@@ -1,0 +1,47 @@
+.highlight_note_container {
+  transition: opacity 200ms;
+  opacity: 1;
+  visibility: hidden;
+
+  &.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  &.inactive {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &.scrolling {
+    opacity: 0;
+  }
+
+  &.rendered {
+    visibility: visible;
+  }
+}
+.highlight_note {
+  cursor: pointer;
+  position: absolute;
+  background: white;
+  height: auto;
+  padding: 0 5px;
+  left: 0;
+  top: 0;
+
+  &.center-of-gravity-left {
+    text-align: right;
+  }
+
+  &.center-of-gravity-right {
+    text-align: left;
+  }
+  .controls {
+    display: none;
+  }
+}
+
+.highlight_note__underline {
+  position: absolute;
+}

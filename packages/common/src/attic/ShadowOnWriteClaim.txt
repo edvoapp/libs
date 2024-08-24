@@ -1,0 +1,39 @@
+// import { Vertex } from "./Vertex";
+
+// export interface VertexOid {
+//     writable(): Promise<Vertex>;
+// }
+
+// export class ShadowOnWriteVertex implements VertexOid {
+//     private vertex: Vertex | null = null;
+//     private lastOwnedVertex?: Vertex;
+//     private templateLineage: Vertex[] = [];
+
+//     async writable(): Promise<Vertex> {
+//         throw "unimplemented";
+//         return new Vertex({}) // just to shut TS up
+
+//         // if (this.vertex) return this.vertex;
+//         // TODO - recursively do this, starting from from lastOwnedVertex, continuing through templateLineage
+//         // Finally, set this.vertex to the new leaf vertex
+
+//         // // this means we have to shadow the CURRENT bound vertex
+//         // let body_ = await bound.entity.fetchRoleReference(['body'])
+
+//         // const newVertex = new Vertex({ meta: bound.entity.meta })
+//         // await newVertex.save(trx);
+
+//         // if (body_) {
+//         //     await newVertex.attach(trx, body_, ['body'])
+//         // }
+
+//         // await newVertex.attachMemberOf(trx, bound.renderCtx.shadowParent, "category")
+
+//         // // Remember from whence you came
+//         // await newVertex.attach(trx, bound.entity, [
+//         //     'category-shadow',
+//         // ])
+//         // precedent = newVertex;
+
+//     }
+// }

@@ -1,0 +1,12 @@
+{
+  "name": "libs",
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "link": "cd packages/common && bun link && cd ../ui && bun link && cd ../util && bun link && cd ../wasm-bindings && bun link && cd ../web-entities && bun link && cd ../annotator-iframe-wrapper && bun link"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

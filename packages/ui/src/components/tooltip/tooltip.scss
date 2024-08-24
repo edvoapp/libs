@@ -1,0 +1,19 @@
+@import url('~react-popper-tooltip/dist/styles.css');
+@import '../../styles/variables';
+
+.tooltip-container {
+  --tooltipBackground: #18181b !important;
+  --tooltipBorder: #18181b !important;
+  --tooltipColor: white !important;
+}
+.tooltip-container.tooltip {
+  z-index: $z-index !important;
+  white-space: nowrap;
+  background-color: #18181b;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  border-color: #18181b;
+  border-radius: 3px;
+  padding: 4px 8px;
+}

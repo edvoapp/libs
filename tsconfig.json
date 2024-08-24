@@ -1,0 +1,62 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    /* Basic Options */
+    "target": "esnext",
+    "module": "esnext",
+    "useDefineForClassFields": false,
+    "useUnknownInCatchVariables": false,
+    "lib": ["ESNext","dom","dom.iterable"],
+    "allowJs": true /* Allow javascript files to be compiled. */,
+    // "rootDir": "./" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
+    /* Strict Type-Checking Options */
+    "strict": true /* Enable all strict type-checking options. */,
+    /* Module Resolution Options */
+    "moduleResolution": "node" /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */,
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@edvoapp/*": ["packages/*/src"]
+    // },
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "paths": {
+      "react": ["./node_modules/preact/compat/"],
+      "react-dom": ["./node_modules/preact/compat/"]
+    },
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noImplicitAny": false,
+    "sourceMap": false,
+    "resolveJsonModule": true
+  },
+  "files": [],
+  "exclude": ["node_modules", "dist"],
+  "references": [
+    {
+      "path": "./packages/extension"
+    },
+    {
+      "path": "./packages/common"
+    },
+    {
+      "path": "./packages/firebase-functions"
+    },
+    {
+      "path": "./packages/ui"
+    },
+    {
+      "path": "./packages/webapp"
+    },
+    {
+      "path": "./packages/tests"
+    },
+    {
+      "path": "./packages/native-app"
+    }
+  ]
+}
